@@ -30,6 +30,32 @@ function init() {
     });
 }
 
+function demographic(selectedValue) {
+    // Fetch the JSON data and console log it
+    d3.json(url).then((data) => {
+        console.log(`Data: ${data}`);
+        let metadata = data.metadata;
+
+        let filteredData = metadata.filter((meta) => meta.id == selectedValue);
+      
+        let obj = filteredData[0]
+        
+        // Clear the child elements in div with id sample-metadata
+        d3.select("#sample-metadata").html("");
+  
+        let entries = Object.entries(obj);
+        
+        // Iterate through the entries array
+        // Add a h5 child element for each key-value pair to the div with id sample-metadata
+        entries.forEach(([key,value]) => {
+            d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
+        });
+
+        // Log the entries Array
+        console.log(entries);
+    });
+  }
+  
 // Make the bar chart
 function bar(selectedValue) {
     // Fetch the JSON data and console log it
@@ -94,30 +120,11 @@ function bubble(selectedValue) {
     });
 }
 
-function demographic(selectedValue) {
-    // Fetch the JSON data and console log it
-    d3.json(url).then((data) => {
-        console.log(`Data: ${data}`);
-        let metadata = data.metadata;
-
-        let filteredData = metadata.filter((meta) => meta.id == selectedValue);
-      
-        let obj = filteredData[0]
-        
-        // Clear the child elements in div with id sample-metadata
-        d3.select("#sample-metadata").html("");
-  
-        let entries = Object.entries(obj);
-        
-        // Iterate through the entries array
-        // Add a h5 child element for each key-value pair to the div with id sample-metadata
-        entries.forEach(([key,value]) => {
-            d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
-        });
-
-        // Log the entries Array
-        console.log(entries);
-    });
-  }
+// make new plots when a new user is selected
+function toggle(selectedValue) {
+    demographic(selectedValue);
+    bar(selectedValue);
+    bubble(selectedValue)
+}
 
 init();
